@@ -1,0 +1,40 @@
+{
+  "doc_id": "b01a2cd1-cb21-44fd-a70d-89dbf8a7d9ce",
+  "doc_name": "myposture.ai",
+  "doc_version": "aa1603e7c638751b57704ae7831aba4f",
+  "format": "tf_js",
+  "version": 88,
+  "inputs": {
+    "Image": {
+      "dtype": "float32",
+      "shape": [
+        null,
+        224,
+        224,
+        3
+      ],
+      "name": "Image:0"
+    }
+  },
+  "outputs": {
+    "Confidences": {
+      "dtype": "float32",
+      "shape": [
+        null,
+        5
+      ],
+      "name": "69466465-7c60-437d-a5a2-402835e23a49/dense_2/Softmax:0"
+    }
+  },
+  "tags": null,
+  "classes": {
+    "Label": [
+      "MoveToTheLeft",
+      "MoveLittleToTheLeft",
+      "MoveLittleToTheRight",
+      "Okay",
+      "MoveToTheRight"
+    ]
+  },
+  "filename": "model.json"
+}
