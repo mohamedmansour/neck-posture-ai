@@ -12,24 +12,37 @@ export default memo(function Camera(props: CameraProps) {
   
   useEffect(() => {
     let cameraInterval = 0
+    const postureAsync = PostureAI()
+    const userMediaAsync = navigator.mediaDevices.getUserMedia({ video: true })
 
-    const predictWebcam = async () => {
-      const postureAi = PostureAI()
-      await postureAi.load()
-      const updatePrediction = () =>
-          props.onFrameChange(postureAi.predict(videoRef.current!))
-      cameraInterval = window.setInterval(() => updatePrediction(), 1000)
-      updatePrediction()
-      props.onLoaded()
-      setLoading(false)
-    }
-    
-    navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream
-        videoRef.current.addEventListener('loadeddata', predictWebcam)
+    // Initialize posture promise so that first page load will be quicker. This will run in parallel of
+    // getting the user agent and not blocking.
+    postureAsync.then(() => {})
+
+    // Wait till all the promises for webcam and ai api are fetched.
+    Promise.allSettled([postureAsync, userMediaAsync]).then(settledResult => {
+      const [postureResponse, userMediaResponse] = settledResult
+
+      if (postureResponse.status == 'fulfilled' && userMediaResponse.status == 'fulfilled') {
+
+        // Webcam ready.
+        const predictWebcam = async () => {
+          // Check the frame every second.
+          const updatePrediction = () => props.onFrameChange(postureResponse.value.predict(videoRef.current!))
+          cameraInterval = window.setInterval(() => updatePrediction(), 1000)
+          updatePrediction()
+
+          // Update UI to inform everything is loaded.
+          props.onLoaded()
+          setLoading(false)
+        }
+
+        if (videoRef.current) {
+          videoRef.current.srcObject = userMediaResponse.value
+          videoRef.current.addEventListener('loadeddata', predictWebcam)
+        }
       }
-    })
+    }) 
 
     return () => {
       clearInterval(cameraInterval)

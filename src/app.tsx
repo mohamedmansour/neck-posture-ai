@@ -31,6 +31,7 @@ function scoreToText(score: string): string {
   }
 }
 
+// The overlay that displays the scores.
 function Overlay({ loading, score }) {
   return (
     <div className="overlay">
@@ -78,9 +79,11 @@ function App() {
     total: 0
   })
 
+  // Aggregate the scores after every frame change.
   const onFrameChange = (score: InferenceType) => {
     const new_scores = Object.entries(score).sort((a, b) => b[1] - a[1])
     const [top_score_id, top_score_number] =  new_scores[0]
+
     setScore(score => {
       score.latest = top_score_id
       score.latestLabel = scoreToText(top_score_id)

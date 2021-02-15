@@ -1,7 +1,4 @@
-import React, { useEffect, useRef } from 'react'
-
 import * as tf from '@tensorflow/tfjs';
-import { ready } from '@tensorflow/tfjs';
 
 interface SignatureInputType {
   dtype: string
@@ -34,23 +31,19 @@ export interface InferenceType {
   MoveToTheRight?: number
 }
 
-export function PostureAI() {
-  let signature: Signature
-  let height: number
-  let width: number
-  let outputName: string = ''
-  let classes: string[] = []
-  let model: tf.GraphModel
+export interface PostureResponse {
+  dispose: () => void
+  predict: (video: HTMLVideoElement) => InferenceType
+}
 
-  const load = async () => {
-    const response = await fetch('model/signature.json')
-    signature = await response.json() as Signature
-    [width, height] = signature.inputs.Image.shape.slice(1,3)
-    outputName = signature.outputs.Confidences.name;
-    classes = signature.classes.Label
-    model = await tf.loadGraphModel('model/model.json')
-  }
-  
+export async function PostureAI(): Promise<PostureResponse> {
+  const response = await fetch('model/signature.json')
+  const signature = await response.json() as Signature
+  const [width, height] = signature.inputs.Image.shape.slice(1,3)
+  const outputName = signature.outputs.Confidences.name;
+  const classes = signature.classes.Label
+  const model = await tf.loadGraphModel('model/model.json')
+
   const dispose = () => {
     if (model) {
       model.dispose()
@@ -103,7 +96,6 @@ export function PostureAI() {
   }
 
   return {
-    load,
     dispose,
     predict
   }

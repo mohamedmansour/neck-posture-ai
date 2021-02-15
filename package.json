@@ -4,9 +4,8 @@
   "description": "",
   "main": "index.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "serve": "esbuild src/app.tsx  --outdir=www/js --servedir=www --bundle --sourcemap --define:process.env.NODE_ENV=\\\"development\\\"",
-    "build": "esbuild src/app.tsx --outdir=out --bundle --minify --define:process.env.NODE_ENV=\\\"production\\\""
+    "start": "esbuild src/app.tsx  --outdir=www/js --servedir=www --bundle --sourcemap --define:process.env.NODE_ENV=\\\"development\\\"",
+    "build": "esbuild src/app.tsx --outdir=out --bundle --minify --sourcemap=external --define:process.env.NODE_ENV=\\\"production\\\""
   },
   "author": "",
   "license": "ISC",
