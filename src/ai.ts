@@ -43,12 +43,12 @@ export function PostureAI() {
   let model: tf.GraphModel
 
   const load = async () => {
-    const response = await fetch('/model/signature.json')
+    const response = await fetch('model/signature.json')
     signature = await response.json() as Signature
     [width, height] = signature.inputs.Image.shape.slice(1,3)
     outputName = signature.outputs.Confidences.name;
     classes = signature.classes.Label
-    model = await tf.loadGraphModel('/model/model.json')
+    model = await tf.loadGraphModel('model/model.json')
   }
   
   const dispose = () => {
