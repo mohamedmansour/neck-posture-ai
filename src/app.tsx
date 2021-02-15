@@ -7,11 +7,11 @@ interface Score {
   latest: string
   latestLabel: string
   avg: {
+    "MoveToTheLeft": number
     "MoveLittleToTheLeft": number
+    "Okay": number
     "MoveLittleToTheRight": number
     "MoveToTheRight": number
-    "MoveToTheLeft": number
-    "Okay": number
   },
   total: number
 }
@@ -70,11 +70,11 @@ function App() {
     latest: 'Okay',
     latestLabel: 'Great posture!',
     avg: {
-      MoveLittleToTheLeft: 0,
-      MoveLittleToTheRight: 0,
-      MoveToTheRight: 0,
       MoveToTheLeft: 0,
-      Okay: 0
+      MoveLittleToTheLeft: 0,
+      Okay: 0,
+      MoveLittleToTheRight: 0,
+      MoveToTheRight: 0
     },
     total: 0
   })
